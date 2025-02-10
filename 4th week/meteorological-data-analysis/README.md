@@ -79,7 +79,7 @@ AWS Glue Job permite realizar transformaciones en los datos a través de una int
 - **Data Source:** se escogió el archivo procesado por la función lambda.
 - **Transform - Change Schema:** se modificó la columna fecha para que tenga el tipo `DATE`. El resto de las columnas, al tener un valor decimal, se convirtieron a `FLOAT`.
 - **Tranform - Identifier:** se generó un campo id único para cada registro.
-- **Data Target:** una vez que los datos se han transformado de la manera deseada, se suben al bucket. \
+- **Data Target:** una vez que los datos se han transformado de la manera deseada, se suben al bucket.
 
 El archivo con los datos transformados tendrá un nombre predefinido por AWS como se ve aquí:
 ![image](https://github.com/user-attachments/assets/6879ed00-fad7-4c7c-bb12-6694fec3e2f0)
@@ -87,6 +87,38 @@ El archivo con los datos transformados tendrá un nombre predefinido por AWS com
 Y el archivo csv se encuentra aquí: [transformed_weather_data.csv](https://github.com/kahiji052/Data-Engineer-Academy-Xideral-2025/tree/main/4th%20week/meteorological-data-analysis/transformed_weather_data.csv)
 
 
+## 3. Análisis Exploratorio de Datos (EDA)
+Para todas las variables se implementó la transformación de datos de manera binaria y en multiclase, a pesar de que se eligió `Radiation_Class` como la variable objetivo para el modelo de Machine Learning, se realizaron las transformaciones en todas para facilitar el entrenamiento del modelo mediante categorías.
+
+- **Lluvia** (1- lluvia, 0 - no lluvia)
+- **Radiación** (2 - alta radiación, 1 - radiación moderada, 0 - baja radiación)
+- **Viento** (2 - vientos fuertes, 1 - viento con ráfagas leves, 0 - sin viento)
+- **Temperatura** (2 - Alta, 1 - Moderada, 0 - Baja)
+
+Para realizar la exploración se implementó:
+- **Histograma:** para ver la distribución de las variables.
+- **Gráficos de Caja:** para identifican valores atípicos (y así evitar distorsiones en el modelo).
+- **Matriz de correlación:** verificar las variables que están relacionadas entre sí.
+
+Adicional, se hizo la gráfica para ver la temperatura más dominante entre el 2020 a 2024. Para el caso de Reforma fue moderada como se ve en la siguiente imagen.
+
+![image](https://github.com/user-attachments/assets/a867ac3e-0585-4b1d-99a0-6ac83e6380c2)
 
 
+## 4. Preprocesamiento de Datos
+Se aplicaron técnicas de escalado para normalizar las variables numéricas, lo que mejora el rendimiento de los modelos de Machine Learning. En este caso, se utilizaron los siguientes escaladores:
+- MinMaxScaler: Escala las variables a un rango de 0 a 1.
+- StandardScaler: Escala las variables para que tengan una media de 0 y una desviación estándar de 1.
 
+## 5. Implementación de Modelo de Aprendizaje Automático
+Se implementó el modelo `Random Forest` para la predicción de la variable objetivo `Radiation_Class`, fue entrenado utilizando el conjunto de datos preprocesado y se utilizaron estas métricas :
+- Precisión: fracción de predicciones correctas sobre el total de predicciones.
+- Exactitud: proporción de predicciones positivas correctas sobre todas las predicciones positivas.
+- Sensibilidad: capacidad del modelo para identificar correctamente los casos positivos (en este caso, las clases de radiación alta).
+
+
+![image](https://github.com/user-attachments/assets/9bb260d3-922e-4bae-8b66-c5d52960bbdf)
+
+
+## 6. Conclusiones
+Principalmente, con este proyecto consolidé y apliqué los conocimientos adquiridos en el transcurso de la academia. La implementación del pipeline ETL utilizando AWS permitió automatizar el proceso de la adquisición y limpieza de los datos proporcionados de la API. Y queda la posibilidad de implementar otro tipo de modelos, o en todo caso, ir probando diferentes variables objetivo; dado que para este caso, Random Forest permitió evaluar la precisión del modelo de predicción con una presición del 79%, lo cual no es tan alto pero quizá pudo influir que en el caso de lluvias acumuladas la mayoría fue 0.
